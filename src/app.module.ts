@@ -6,6 +6,11 @@ import { AppService } from './app.service';
 import { RoleModule } from './role/role.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ProjectModule } from './project/project.module';
+import { PlantModule } from './plant/plant.module';
+import { PlantZoneDetailModule } from './plant-zone-detail/plant-zone-detail.module';
+import { ZoneModule } from './zone/zone.module';
+import { SubZoneModule } from './sub-zone/sub-zone.module';
 
 @Module({
   imports: [
@@ -24,8 +29,11 @@ import { AuthModule } from './auth/auth.module';
     RoleModule,
     UserModule,
     AuthModule,
+    ProjectModule,
+    PlantModule,
+    PlantZoneDetailModule,
+    ZoneModule,
+    SubZoneModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -1,6 +1,12 @@
 import { Length } from 'class-validator';
 import { Role } from 'src/role/entities';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('wo_soldoza_sec_usuarios')
 export class User {
