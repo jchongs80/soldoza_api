@@ -1,6 +1,7 @@
 import { PlantZoneDetail } from 'src/plant-zone-detail/entities';
 import { SubZone } from 'src/sub-zone/entities';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Incidence } from '../../incidence/entities/incidence.entity';
 
 @Entity('soldoza_mst_zonas')
 export class Zone {
@@ -18,4 +19,7 @@ export class Zone {
 
   @OneToMany(() => SubZone, (subZone) => subZone.zona)
   subZonas: SubZone[];
+
+  @OneToMany(() => Incidence, (incident) => incident.zona)
+  incidentes: Incidence[];
 }

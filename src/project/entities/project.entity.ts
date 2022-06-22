@@ -1,5 +1,7 @@
+import { Customer } from 'src/customer/entities';
+import { Incidence } from 'src/incidence/entities';
 import { Plant } from 'src/plant/entities';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('soldoza_mst_grl_proyectos')
 export class Project {
@@ -26,4 +28,13 @@ export class Project {
 
   @OneToMany(() => Plant, (plant) => plant.proyecto)
   instalaciones: Plant[];
+
+  @OneToMany(() => Incidence, (incident) => incident.proyecto)
+  incidentes: Incidence[];
+
+  @ManyToOne(() => Customer, (customer) => customer.proyectos, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'cliente_id' })
+  cliente: Customer;
 }

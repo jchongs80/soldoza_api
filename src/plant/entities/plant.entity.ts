@@ -1,3 +1,4 @@
+import { Incidence } from 'src/incidence/entities';
 import { PlantZoneDetail } from 'src/plant-zone-detail/entities';
 import { Project } from 'src/project/entities';
 import {
@@ -31,4 +32,7 @@ export class Plant {
     (plantZoneDetail) => plantZoneDetail.instalacion,
   )
   plantZoneDetails: PlantZoneDetail[];
+
+  @OneToMany(() => Incidence, (incident) => incident.instalacion)
+  incidentes: Incidence[];
 }

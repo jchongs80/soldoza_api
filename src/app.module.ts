@@ -11,6 +11,8 @@ import { PlantModule } from './plant/plant.module';
 import { PlantZoneDetailModule } from './plant-zone-detail/plant-zone-detail.module';
 import { ZoneModule } from './zone/zone.module';
 import { SubZoneModule } from './sub-zone/sub-zone.module';
+import { IncidenceModule } from './incidence/incidence.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { SubZoneModule } from './sub-zone/sub-zone.module';
     PlantZoneDetailModule,
     ZoneModule,
     SubZoneModule,
+    IncidenceModule,
+    CustomerModule,
   ],
 })
 export class AppModule {}

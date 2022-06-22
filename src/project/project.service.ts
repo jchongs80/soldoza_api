@@ -11,6 +11,8 @@ export class ProjectService {
   ) {}
 
   async getProjects() {
-    return this.projectRepository.find({});
+    return this.projectRepository.find({
+      relations: ['cliente']
+    });
   }
 }

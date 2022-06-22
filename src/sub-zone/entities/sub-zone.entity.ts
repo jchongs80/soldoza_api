@@ -1,3 +1,4 @@
+import { Incidence } from 'src/incidence/entities';
 import { User } from 'src/user/entities';
 import { Zone } from 'src/zone/entities';
 import {
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -24,4 +26,7 @@ export class SubZone {
   })
   @JoinColumn({ name: 'zona_id' })
   zona: Zone;
+
+  @OneToMany(() => Incidence, (incident) => incident.subZona)
+  incidentes: Incidence[];
 }
