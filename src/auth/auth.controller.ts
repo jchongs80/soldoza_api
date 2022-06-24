@@ -1,4 +1,4 @@
-import { Body, Controller, NotFoundException, Post } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
 import { User } from 'src/user/entities';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dtos';
@@ -16,5 +16,11 @@ export class AuthController {
     } else {
       throw new NotFoundException('Invalid credentials');
     }
+  }
+
+  @Get('test-firebase')
+  async testFirebase(){
+    await this.authService.testFirebase();
+    return true;
   }
 }

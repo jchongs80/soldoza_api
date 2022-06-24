@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/entities';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dtos';
+import * as admin from 'firebase-admin';
 
 @Injectable()
 export class AuthService {
@@ -37,5 +38,33 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  async testFirebase() {
+    const payload = {
+      data: {
+        MyKey1: 'Hello',
+      },
+    };
+
+    const options = {
+      priority: 'heigh',
+      timeToLive: 60 * 60 * 24,
+    };
+
+    const token = 'safasf';
+
+    try {
+      // const messaging = admin.messaging();
+      // console.log(messaging)
+      await admin
+        .messaging()
+        .sendToDevice(token, payload, options)
+        .then((x) => {
+          console.log('Se envio', x);
+        });
+    } catch (error) {
+      console.log('error ctm', error);
+    }
   }
 }
