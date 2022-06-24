@@ -1,10 +1,12 @@
 import { Length } from 'class-validator';
+import { ProjectUser } from 'src/project-user/entities';
 import { Role } from 'src/role/entities';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -37,4 +39,8 @@ export class User {
   })
   @JoinColumn({ name: 'rolid' })
   rol: Role;
+
+  
+  @OneToMany(() => ProjectUser, (projectUser) => projectUser.usuario)
+  projectUsers: ProjectUser[];
 }

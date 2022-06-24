@@ -1,6 +1,7 @@
 import { Customer } from 'src/customer/entities';
 import { Incidence } from 'src/incidence/entities';
 import { Plant } from 'src/plant/entities';
+import { ProjectUser } from 'src/project-user/entities';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('soldoza_mst_grl_proyectos')
@@ -37,4 +38,7 @@ export class Project {
   })
   @JoinColumn({ name: 'cliente_id' })
   cliente: Customer;
+
+  @OneToMany(() => ProjectUser, (projectUser) => projectUser.proyecto)
+  projectUsers: ProjectUser[];
 }

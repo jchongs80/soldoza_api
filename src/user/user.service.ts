@@ -41,11 +41,10 @@ export class UserService {
   }
 
   async findOne(data: UserFindOne) {
-    return await this.userRepository
-      .createQueryBuilder('user')
-      .where(data)
-      .addSelect('user.password_usuario')
-      .getOne();
+    return this.userRepository.findOne({
+      where: data,
+      relations: ['rol'],
+    });
   }
 
   async getOne(id: number, useEntity?: User) {

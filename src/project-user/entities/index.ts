@@ -1,0 +1,1 @@
+export {ProjectUser} from './project-user.entity';
