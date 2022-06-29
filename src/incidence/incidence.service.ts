@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Incidence } from './entities';
 import { Repository } from 'typeorm';
 import { CreateIncidenceDto, IncidenceQueryDto } from './dtos';
+import { handlerIncidence } from './helpers';
 
 @Injectable()
 export class IncidenceService {
@@ -19,7 +20,7 @@ export class IncidenceService {
   }
 
   async findByFilters(dto: IncidenceQueryDto) {
-    return await this.incidenceRepository.find({
+    const incidences = await this.incidenceRepository.find({
       where: {
         proyecto: {
           id: dto?.proyectoId || null,
@@ -37,7 +38,15 @@ export class IncidenceService {
           id: dto?.usuarioCreadorId || null,
         },
       },
-      relations: ['proyecto', 'instalacion', 'zona', 'subZona', 'usuarioCreador']
+      relations: [
+        'proyecto',
+        'instalacion',
+        'zona',
+        'subZona',
+        'usuarioCreador',
+        'proyecto.cliente',
+      ],
     });
+    return incidences.map((x) => handlerIncidence(x));
   }
 }

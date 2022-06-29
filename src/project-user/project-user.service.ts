@@ -17,7 +17,7 @@ export class ProjectUserService {
           id,
         },
       },
-      relations: ['proyecto'],
+      relations: ['proyecto', 'proyecto.cliente'],
     });
 
     return detail.map((x) => x.proyecto);
