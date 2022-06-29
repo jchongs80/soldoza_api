@@ -12,4 +12,7 @@ export class IncidenceQueryDto {
 
   @IsOptional()
   subZonaId: number;
+
+  @IsOptional()
+  usuarioCreadorId:number;
 }

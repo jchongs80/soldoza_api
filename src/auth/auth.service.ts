@@ -24,6 +24,7 @@ export class AuthService {
         role: user.rol,
         userPhoto: user?.fotoUsuario || 'default',
         userSignature: user?.firmaUsuario || 'default',
+        userType: user?.tipoUsuario
       }),
     };
   }
@@ -41,18 +42,21 @@ export class AuthService {
   }
 
   async testFirebase() {
-    const payload = {
-      data: {
-        MyKey1: 'Hello',
+    var payload = {
+      notification: {
+        title: 'This is a diegdddo kraenau',
+        body: 'This is the body of the notification message.',
+        sound: "default"
       },
     };
 
     const options = {
-      priority: 'heigh',
+      priority: 'high',
       timeToLive: 60 * 60 * 24,
     };
 
-    const token = 'safasf';
+    const token =
+      'fzgSqdkHSxKohjFBUyWSXH:APA91bHhaNV1FaQKo5VMKgcK2pk6728hP9OJTOsRZVMA3wo0VzOdTUOIRYp6XoMu3H0shDu6tyiSczGqiscZDcY_FDQdF15ZrQT1tqelNn2TIzVseshcwS04vaMqYeOCiXcgnmj3pTEj';
 
     try {
       // const messaging = admin.messaging();

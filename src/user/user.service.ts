@@ -43,7 +43,7 @@ export class UserService {
   async findOne(data: UserFindOne) {
     return this.userRepository.findOne({
       where: data,
-      relations: ['rol'],
+      relations: ['rol','tipoUsuario'],
     });
   }
 

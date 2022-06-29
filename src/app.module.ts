@@ -14,6 +14,7 @@ import { SubZoneModule } from './sub-zone/sub-zone.module';
 import { IncidenceModule } from './incidence/incidence.module';
 import { CustomerModule } from './customer/customer.module';
 import { ProjectUserModule } from './project-user/project-user.module';
+import { UserTypeModule } from './user-type/user-type.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ProjectUserModule } from './project-user/project-user.module';
     IncidenceModule,
     CustomerModule,
     ProjectUserModule,
+    UserTypeModule,
   ],
 })
 export class AppModule {}

@@ -19,19 +19,25 @@ export class IncidenceService {
   }
 
   async findByFilters(dto: IncidenceQueryDto) {
-    return await this.incidenceRepository.findBy({
-      proyecto: {
-        id: dto?.proyectoId || null,
+    return await this.incidenceRepository.find({
+      where: {
+        proyecto: {
+          id: dto?.proyectoId || null,
+        },
+        instalacion: {
+          id: dto?.instalacionId || null,
+        },
+        zona: {
+          id: dto?.zonaId || null,
+        },
+        subZona: {
+          id: dto?.subZonaId || null,
+        },
+        usuarioCreador: {
+          id: dto?.usuarioCreadorId || null,
+        },
       },
-      instalacion: {
-        id: dto?.instalacionId || null,
-      },
-      zona: {
-        id: dto?.zonaId || null,
-      },
-      subZona: {
-        id: dto?.subZonaId || null,
-      },
+      relations: ['proyecto', 'instalacion', 'zona', 'subZona', 'usuarioCreador']
     });
   }
 }

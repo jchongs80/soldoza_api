@@ -1,7 +1,14 @@
 import { Plant } from 'src/plant/entities';
 import { Project } from 'src/project/entities';
+import { User } from 'src/user/entities';
 import { Zone } from 'src/zone/entities';
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { SubZone } from '../../sub-zone/entities/sub-zone.entity';
 
 @Entity('wo_soldoza_incidentes')
@@ -32,4 +39,44 @@ export class Incidence {
   })
   @JoinColumn({ name: 'subzonaid' })
   subZona: SubZone;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'usuario_creador_id' })
+  usuarioCreador: User;
+
+  @Column({
+    name: 'fecha_incidencia',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaIncidencia: string;
+
+  @Column({ name: 'descripcion_incidencia', type: 'varchar', nullable: true })
+  descripcionIncidencia: string;
+
+  @Column({ name: 'accion_requerida', type: 'varchar', nullable: true })
+  accionRequerida: string;
+
+  @Column({
+    name: 'fecha_limite',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaLimite: string;
+
+  @Column({
+    name: 'es_no_conformidad',
+    type: 'bit',
+    nullable: true,
+  })
+  esNoConformidad: boolean;
+
+  @Column({
+    name: 'codigo_nc',
+    type: 'varchar',
+    nullable: true,
+  })
+  codigoNC: string;
 }

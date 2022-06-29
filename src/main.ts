@@ -26,7 +26,7 @@ async function bootstrap() {
 
   // Initialize the firebase admin app
   admin.initializeApp({
-    credential: admin.credential.cert(varTest as any),
+    credential: admin.credential.cert(firebaseServiceAccount as any),
   });
 
   //Config

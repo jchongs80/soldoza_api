@@ -1,6 +1,8 @@
 import { Length } from 'class-validator';
 import { ProjectUser } from 'src/project-user/entities';
 import { Role } from 'src/role/entities';
+import { UserType } from 'src/user-type/entities';
+import { Incidence } from '../../incidence/entities/incidence.entity';
 import {
   Column,
   Entity,
@@ -40,7 +42,15 @@ export class User {
   @JoinColumn({ name: 'rolid' })
   rol: Role;
 
-  
   @OneToMany(() => ProjectUser, (projectUser) => projectUser.usuario)
   projectUsers: ProjectUser[];
+
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioCreador)
+  incidentesCreados: Incidence[];
+
+  @ManyToOne(() => UserType, (userType) => userType.usuarios, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'tipo_usuario_id' })
+  tipoUsuario: UserType;
 }

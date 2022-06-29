@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateIncidenceDto {
   @IsNotEmpty()
@@ -12,4 +12,25 @@ export class CreateIncidenceDto {
 
   @IsNotEmpty()
   subZona: number;
+
+  @IsNotEmpty()
+  usuarioCreador: number;
+
+  @IsOptional()
+  fechaIncidencia: string;
+
+  @IsOptional()
+  descripcionIncidencia: string;
+
+  @IsOptional()
+  accionRequerida: string;
+
+  @IsOptional()
+  fechaLimite: string;
+
+  @IsOptional()
+  esNoConformidad: boolean;
+
+  @IsOptional()
+  codigoNC: string;
 }
