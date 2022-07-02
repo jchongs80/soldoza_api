@@ -37,7 +37,7 @@ export class IncidenceService {
     const incidence = this.incidenceRepository.create({
       ...dto,
       codIncidente: codIncidence,
-      estado: 1
+      estado: 1,
     } as any);
     const incidenceCreated: any = await this.incidenceRepository.save(
       incidence,
@@ -80,6 +80,12 @@ export class IncidenceService {
         'subZona',
         'usuarioCreador',
         'proyecto.cliente',
+        'disciplina',
+        'estado',
+        'fotos',
+        'disciplina.categorias',
+        'fotos.usuario',
+        'usuarioCreador.tipoUsuario'
       ],
     });
     return incidences.map((x) => handlerIncidence(x));

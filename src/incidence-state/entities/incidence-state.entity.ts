@@ -14,9 +14,9 @@ export class IncidenceState {
   id: number;
 
   @Column({ name: 'cod_estado', type: 'varchar', nullable: true })
-  codEstadi: string;
+  codEstado: string;
 
-  @Column({ name: 'descripcion_Etado', type: 'varchar', nullable: true })
+  @Column({ name: 'descripcion_estado', type: 'varchar', nullable: true })
   descripcionEstado: string;
 
   @OneToMany(
