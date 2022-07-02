@@ -15,6 +15,10 @@ import { IncidenceModule } from './incidence/incidence.module';
 import { CustomerModule } from './customer/customer.module';
 import { ProjectUserModule } from './project-user/project-user.module';
 import { UserTypeModule } from './user-type/user-type.module';
+import { CategoryModule } from './category/category.module';
+import { DisciplineModule } from './discipline/discipline.module';
+import { IncidenceCategoryModule } from './incidence-category/incidence-category.module';
+import { IncidenceStateModule } from './incidence-state/incidence-state.module';
 
 @Module({
   imports: [
@@ -42,6 +46,10 @@ import { UserTypeModule } from './user-type/user-type.module';
     CustomerModule,
     ProjectUserModule,
     UserTypeModule,
+    CategoryModule,
+    DisciplineModule,
+    IncidenceCategoryModule,
+    IncidenceStateModule,
   ],
 })
 export class AppModule {}

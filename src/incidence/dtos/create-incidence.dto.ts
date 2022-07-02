@@ -16,6 +16,12 @@ export class CreateIncidenceDto {
   @IsNotEmpty()
   usuarioCreador: number;
 
+  @IsNotEmpty()
+  categorias: number[];
+
+  @IsNotEmpty()
+  disciplina: number;
+
   @IsOptional()
   fechaIncidencia: string;
 
@@ -33,4 +39,13 @@ export class CreateIncidenceDto {
 
   @IsOptional()
   codigoNC: string;
+
+  @IsOptional()
+  comentarioReceptor: string;
+
+  @IsOptional()
+  estado: number;
+
+  @IsOptional()
+  resultadoReceptor: string;
 }

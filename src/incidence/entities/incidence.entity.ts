@@ -7,9 +7,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { SubZone } from '../../sub-zone/entities/sub-zone.entity';
+import { IncidenceCategory } from '../../incidence-category/entities/incidence-category.entity';
+import { Discipline } from 'src/discipline/entities';
+import { IncidenceState } from 'src/incidence-state/entities';
 
 @Entity('wo_soldoza_incidentes')
 export class Incidence {
@@ -46,6 +50,20 @@ export class Incidence {
   @JoinColumn({ name: 'usuario_creador_id' })
   usuarioCreador: User;
 
+  @ManyToOne(() => Discipline, (discipline) => discipline.incidences, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'disciplina_id' })
+  disciplina: Discipline;
+
+  @ManyToOne(() => IncidenceState, (incidenceState) => incidenceState.incidentes, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'estado_id' })
+  estado: IncidenceState;
+
+  // Normal columns
+
   @Column({
     name: 'fecha_incidencia',
     type: 'varchar',
@@ -79,4 +97,31 @@ export class Incidence {
     nullable: true,
   })
   codigoNC: string;
+
+  @Column({
+    name: 'comentario_receptor',
+    type: 'varchar',
+    nullable: true,
+  })
+  comentarioReceptor: string;
+
+  @Column({
+    name: 'resultado_receptor',
+    type: 'varchar',
+    nullable: true,
+  })
+  resultadoReceptor: string;
+
+  @Column({
+    name: 'cod_incidente',
+    type: 'varchar',
+    nullable: true,
+  })
+  codIncidente: string;
+
+  @OneToMany(
+    () => IncidenceCategory,
+    (incidenceCategory) => incidenceCategory.incidente,
+  )
+  incidenteCategorias: IncidenceCategory[];
 }

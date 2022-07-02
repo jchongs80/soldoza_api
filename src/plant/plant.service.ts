@@ -13,12 +13,19 @@ export class PlantService {
   async findByProjectId(id: number) {
     const plants = await this.plantRepository
       .createQueryBuilder('plant')
-      .where({proyecto: id})
+      .where({ proyecto: id })
       .getMany();
 
-    if (!plants)
-      throw new NotFoundException('Plant does not exists');
+    if (!plants) throw new NotFoundException('Plant does not exists');
 
     return plants;
+  }
+
+  async findPlantById(id: number) {
+    const plant = await this.plantRepository.findOneBy({
+      id,
+    });
+
+    return plant;
   }
 }
