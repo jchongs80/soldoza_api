@@ -85,15 +85,33 @@ export class IncidenceService {
         'fotos',
         'disciplina.categorias',
         'fotos.usuario',
-        'usuarioCreador.tipoUsuario'
+        'fotos.usuario.tipoUsuario',
+        'usuarioCreador.tipoUsuario',
       ],
     });
     return incidences.map((x) => handlerIncidence(x));
   }
 
   async findById(id: number) {
-    return await this.incidenceRepository.findOneBy({
-      id,
+    return await this.incidenceRepository.findOne({
+      where: {
+        id,
+      },
+      relations: [
+        'proyecto',
+        'instalacion',
+        'zona',
+        'subZona',
+        'usuarioCreador',
+        'proyecto.cliente',
+        'disciplina',
+        'estado',
+        'fotos',
+        'disciplina.categorias',
+        'fotos.usuario',
+        'fotos.usuario.tipoUsuario',
+        'usuarioCreador.tipoUsuario',
+      ],
     });
   }
 

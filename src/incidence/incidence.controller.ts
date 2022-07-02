@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateIncidenceDto, IncidenceQueryDto } from './dtos';
 import { IncidenceService } from './incidence.service';
 
@@ -17,4 +17,12 @@ export class IncidenceController {
   async findByFilters(@Query() query: IncidenceQueryDto) {
     return await this.incidenceService.findByFilters(query);
   }
+
+  @Get(':id')
+  async getIncidenceById(@Param('id') id: string) {
+    const incidence = await this.incidenceService.findById(Number(id));
+
+    return incidence;
+  }
+
 }
