@@ -11,6 +11,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Photo } from 'src/photo/entities';
 
 @Entity('wo_soldoza_sec_usuarios')
 export class User {
@@ -47,6 +48,9 @@ export class User {
 
   @OneToMany(() => Incidence, (incidence) => incidence.usuarioCreador)
   incidentesCreados: Incidence[];
+
+  @OneToMany(() => Photo, (photo) => photo.usuario)
+  incidenteFotos: Photo[];
 
   @ManyToOne(() => UserType, (userType) => userType.usuarios, {
     onDelete: 'CASCADE',

@@ -37,6 +37,7 @@ export class IncidenceService {
     const incidence = this.incidenceRepository.create({
       ...dto,
       codIncidente: codIncidence,
+      estado: 1
     } as any);
     const incidenceCreated: any = await this.incidenceRepository.save(
       incidence,
@@ -82,6 +83,12 @@ export class IncidenceService {
       ],
     });
     return incidences.map((x) => handlerIncidence(x));
+  }
+
+  async findById(id: number) {
+    return await this.incidenceRepository.findOneBy({
+      id,
+    });
   }
 
   // Private methods

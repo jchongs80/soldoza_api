@@ -19,6 +19,7 @@ import { CategoryModule } from './category/category.module';
 import { DisciplineModule } from './discipline/discipline.module';
 import { IncidenceCategoryModule } from './incidence-category/incidence-category.module';
 import { IncidenceStateModule } from './incidence-state/incidence-state.module';
+import { PhotoModule } from './photo/photo.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { IncidenceStateModule } from './incidence-state/incidence-state.module';
     DisciplineModule,
     IncidenceCategoryModule,
     IncidenceStateModule,
+    PhotoModule,
   ],
 })
 export class AppModule {}

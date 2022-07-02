@@ -14,5 +14,6 @@ import { PlantModule } from 'src/plant/plant.module';
   ],
   providers: [IncidenceService],
   controllers: [IncidenceController],
+  exports: [IncidenceService],
 })
 export class IncidenceModule {}
