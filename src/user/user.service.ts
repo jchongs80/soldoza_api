@@ -43,7 +43,7 @@ export class UserService {
   async findOne(data: UserFindOne) {
     return this.userRepository.findOne({
       where: data,
-      relations: ['rol','tipoUsuario'],
+      relations: ['rol', 'tipoUsuario'],
     });
   }
 
@@ -56,5 +56,11 @@ export class UserService {
       throw new NotFoundException('User does not exists or unauthorized');
 
     return user;
+  }
+
+  async updateToken(id: number, token: string) {
+    return await this.userRepository.update(id, {
+      token,
+    });
   }
 }

@@ -57,4 +57,7 @@ export class User {
   })
   @JoinColumn({ name: 'tipo_usuario_id' })
   tipoUsuario: UserType;
+
+  @Column({ name: 'token', type: 'varchar', nullable: true })
+  token: string;
 }

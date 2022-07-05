@@ -22,4 +22,17 @@ export class ProjectUserService {
 
     return detail.map((x) => x.proyecto);
   }
+
+  async getUsersByProjectId(id: number) {
+    const detail = await this.projectUserRepository.find({
+      where: {
+        proyecto: {
+          id,
+        },
+      },
+      relations: ['usuario.tipoUsuario', 'usuario.rol'],
+    });
+
+    return detail.map((x) => x.usuario);
+  }
 }

@@ -1,4 +1,4 @@
-import { CreateIncidenceCategoryDto } from './../incidence-category/dtos/create-incidence-category.dto';
+import { CreateIncidenceCategoryDto } from 'src/incidence-category/dtos/create-incidence-category.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Incidence } from './entities';
@@ -7,6 +7,14 @@ import { CreateIncidenceDto, IncidenceQueryDto } from './dtos';
 import { handlerIncidence } from './helpers';
 import { IncidenceCategoryService } from 'src/incidence-category/incidence-category.service';
 import { PlantService } from 'src/plant/plant.service';
+import { ProjectUserService } from 'src/project-user/project-user.service';
+import {
+  getUsersByRole,
+  getUsersByType,
+  sendNotificationsToTokenArray,
+} from 'src/commons/helpers';
+import { UserRoles, UserTypes } from 'src/commons/enums';
+import { User } from 'src/user/entities';
 
 @Injectable()
 export class IncidenceService {
@@ -15,6 +23,7 @@ export class IncidenceService {
     private readonly incidenceRepository: Repository<Incidence>,
     private readonly incidenceCategoryService: IncidenceCategoryService,
     private readonly plantService: PlantService,
+    private readonly projectUserService: ProjectUserService,
   ) {}
 
   // Public methods
@@ -51,6 +60,13 @@ export class IncidenceService {
       };
       await this.incidenceCategoryService.createIncidenceCategory(format);
     }
+
+    //Get users by project, tipo = EMISOR, rol = 2 and  3
+    const users = await this.filterUsersToSendNotification(dto.proyecto);
+
+    //Send notification
+    this.sendNotificationWhenIncidentIsCreated(users);
+
     return incidenceCreated;
   }
 
@@ -128,5 +144,33 @@ export class IncidenceService {
     });
 
     return incidences;
+  }
+
+  private async filterUsersToSendNotification(proyectoId: number) {
+    let users = await this.projectUserService.getUsersByProjectId(proyectoId);
+    users = getUsersByType(users, UserTypes.EMISOR);
+    users = [].concat(
+      getUsersByRole(users, UserRoles.NIVEL_2),
+      getUsersByRole(users, UserRoles.NIVEL_3),
+    );
+
+    return users;
+  }
+
+  private async sendNotificationWhenIncidentIsCreated(users: User[]) {
+    await sendNotificationsToTokenArray(
+      users.map((x) => x.token),
+      {
+        notification: {
+          title: 'A new incidence was created',
+          body: 'Recently a new incidence was created.',
+          sound: 'default',
+        },
+      },
+      {
+        priority: 'high',
+        timeToLive: 60 * 60 * 24,
+      },
+    );
   }
 }

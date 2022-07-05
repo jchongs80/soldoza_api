@@ -5,12 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Incidence } from './entities';
 import { IncidenceCategoryModule } from 'src/incidence-category/incidence-category.module';
 import { PlantModule } from 'src/plant/plant.module';
+import { ProjectUserModule } from 'src/project-user/project-user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Incidence]),
     forwardRef(() => IncidenceCategoryModule),
     forwardRef(() => PlantModule),
+    forwardRef(() => ProjectUserModule),
   ],
   providers: [IncidenceService],
   controllers: [IncidenceController],

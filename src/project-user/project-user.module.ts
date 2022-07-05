@@ -8,5 +8,6 @@ import { ProjectUserService } from './project-user.service';
   imports: [TypeOrmModule.forFeature([ProjectUser])],
   controllers: [ProjectUserController],
   providers: [ProjectUserService],
+  exports: [ProjectUserService]
 })
 export class ProjectUserModule {}
