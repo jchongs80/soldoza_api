@@ -110,27 +110,29 @@ export class IncidenceService {
   }
 
   async findById(id: number) {
-    return await this.incidenceRepository.findOne({
-      where: {
-        id,
-      },
-      relations: [
-        'proyecto',
-        'instalacion',
-        'zona',
-        'subZona',
-        'usuarioCreador',
-        'proyecto.cliente',
-        'disciplina',
-        'estado',
-        'fotos',
-        'disciplina',
-        'incidenteCategorias.categoria',
-        'fotos.usuario',
-        'fotos.usuario.tipoUsuario',
-        'usuarioCreador.tipoUsuario',
-      ],
-    });
+    return handlerIncidence(
+      await this.incidenceRepository.findOne({
+        where: {
+          id,
+        },
+        relations: [
+          'proyecto',
+          'instalacion',
+          'zona',
+          'subZona',
+          'usuarioCreador',
+          'proyecto.cliente',
+          'disciplina',
+          'estado',
+          'fotos',
+          'disciplina',
+          'incidenteCategorias.categoria',
+          'fotos.usuario',
+          'fotos.usuario.tipoUsuario',
+          'usuarioCreador.tipoUsuario',
+        ],
+      }),
+    );
   }
 
   // Private methods
