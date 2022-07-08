@@ -1,4 +1,5 @@
 import { Incidence } from 'src/incidence/entities';
+import { PlantUser } from 'src/plant-user/entities';
 import { PlantZoneDetail } from 'src/plant-zone-detail/entities';
 import { Project } from 'src/project/entities';
 import {
@@ -35,4 +36,7 @@ export class Plant {
 
   @OneToMany(() => Incidence, (incident) => incident.instalacion)
   incidentes: Incidence[];
+
+  @OneToMany(() => PlantUser, (plantUser) => plantUser.instalacion)
+  instalacionesUsuarios: PlantUser[];
 }

@@ -1,9 +1,9 @@
 import { User } from 'src/user/entities';
 
-export const getUsersByType = (users: User[], type: string) => {
-  return users.filter((x) => x.tipoUsuario.descripcionTipo === type);
+export const getUsersByType = (users: User[], id: number) => {
+  return users.filter((x) => x.tipoUsuario.id === id);
 };
 
-export const getUsersByRole = (userS: User[], role: string) => {
-  return userS.filter((x) => x.rol.descripcionRol === role);
+export const getUsersByRole = (userS: User[], id: number) => {
+  return userS.filter((x) => x.rol.id === id);
 };

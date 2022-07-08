@@ -1,4 +1,4 @@
 export enum UserTypes {
-  EMISOR = 'EMISOR',
-  RECEPTOR = 'RECEPTOR',
+  EMISOR = 1,
+  RECEPTOR = 2,
 }

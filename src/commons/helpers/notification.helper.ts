@@ -8,14 +8,16 @@ export const sendNotificationsToTokenArray = async (
   try {
     for (const token of tokenArray) {
       const failedTokens = [];
-      await admin
-        .messaging()
-        .sendToDevice(token, payload, options)
-        .then((response) => {
-          if (response.failureCount > 0) {
-            failedTokens.push(token);
-          }
-        });
+      if(token){
+        await admin
+          .messaging()
+          .sendToDevice(token, payload, options)
+          .then((response) => {
+            if (response.failureCount > 0) {
+              failedTokens.push(token);
+            }
+          });
+      }
       if (failedTokens.length > 0)
         console.log('Tokens fallados: ' + failedTokens);
     }

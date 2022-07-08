@@ -12,6 +12,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Photo } from 'src/photo/entities';
+import { PlantUser } from 'src/plant-user/entities';
 
 @Entity('wo_soldoza_sec_usuarios')
 export class User {
@@ -60,4 +61,7 @@ export class User {
 
   @Column({ name: 'token', type: 'varchar', nullable: true })
   token: string;
+
+  @OneToMany(() => PlantUser, (plantUser) => plantUser.instalacion)
+  instalacionesUsuarios: PlantUser[];
 }

@@ -1,5 +1,5 @@
 import { CreateIncidenceCategoryDto } from 'src/incidence-category/dtos/create-incidence-category.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, LoggerService } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Incidence } from './entities';
 import { Repository } from 'typeorm';
@@ -15,19 +15,24 @@ import {
 } from 'src/commons/helpers';
 import { UserRoles, UserTypes } from 'src/commons/enums';
 import { User } from 'src/user/entities';
+import { UserService } from 'src/user/user.service';
+import { PlantUserService } from 'src/plant-user/plant-user.service';
 
 @Injectable()
 export class IncidenceService {
+  logger = new Logger();
+
   constructor(
     @InjectRepository(Incidence)
     private readonly incidenceRepository: Repository<Incidence>,
     private readonly incidenceCategoryService: IncidenceCategoryService,
     private readonly plantService: PlantService,
     private readonly projectUserService: ProjectUserService,
+    private readonly userService: UserService,
+    private readonly plantUserService: PlantUserService,
   ) {}
 
   // Public methods
-
   async createIncidence(dto: CreateIncidenceDto) {
     // Get plant
     const plant = await this.plantService.findPlantById(dto.instalacion);
@@ -36,17 +41,23 @@ export class IncidenceService {
     const amountOfIncidencesByPlantId = (
       await this.getIncidencesByPlantId(dto.instalacion)
     ).length;
+
     const codIncidence =
       'I -' +
       plant.codInstalacion +
       '-' +
       String(amountOfIncidencesByPlantId + 1);
 
+    // Find user creator
+    const userCreator = await this.userService.findOne({
+      id: dto.usuarioCreador,
+    });
+
     // Create Incidence
     const incidence = this.incidenceRepository.create({
       ...dto,
       codIncidente: codIncidence,
-      estado: 1,
+      estado: userCreator.rol.id === 3 ? 1 : 2,
     } as any);
     const incidenceCreated: any = await this.incidenceRepository.save(
       incidence,
@@ -61,11 +72,8 @@ export class IncidenceService {
       await this.incidenceCategoryService.createIncidenceCategory(format);
     }
 
-    //Get users by project, tipo = EMISOR, rol = 2 and  3
-    const users = await this.filterUsersToSendNotification(dto.proyecto);
-
-    //Send notification
-    this.sendNotificationWhenIncidentIsCreated(users);
+    // Manage notifications
+    await this.manageSendNotifications(userCreator, dto);
 
     return incidenceCreated;
   }
@@ -148,13 +156,13 @@ export class IncidenceService {
     return incidences;
   }
 
-  private async filterUsersToSendNotification(proyectoId: number) {
+  private async filterUsersToSendNotification(
+    proyectoId: number,
+    rolesToSend: number[],
+  ) {
     let users = await this.projectUserService.getUsersByProjectId(proyectoId);
     users = getUsersByType(users, UserTypes.EMISOR);
-    users = [].concat(
-      getUsersByRole(users, UserRoles.NIVEL_2),
-      getUsersByRole(users, UserRoles.NIVEL_3),
-    );
+    users = [].concat(rolesToSend.map((x) => getUsersByRole(users, x)));
 
     return users;
   }
@@ -163,7 +171,7 @@ export class IncidenceService {
     await sendNotificationsToTokenArray(
       users.map((x) => x.token),
       {
-        notification: {
+        data: {
           title: 'A new incidence was created',
           body: 'Recently a new incidence was created.',
           sound: 'default',
@@ -174,5 +182,40 @@ export class IncidenceService {
         timeToLive: 60 * 60 * 24,
       },
     );
+  }
+
+  private async manageSendNotifications(
+    userCreator: User,
+    dto: CreateIncidenceDto,
+  ) {
+    let users = [];
+    //Get users by project, tipo = EMISOR, rol = 3
+    if (userCreator.rol.id === UserRoles.NIVEL_3) {
+      users = await this.filterUsersToSendNotification(dto.proyecto, [
+        UserRoles.NIVEL_1,
+        UserRoles.NIVEL_2,
+      ]);
+    }
+
+    //Get users by project, tipo = RECEPTOR, rol = 1 and  2
+    if (
+      userCreator.rol.id === UserRoles.NIVEL_1 ||
+      userCreator.rol.id === UserRoles.NIVEL_2
+    ) {
+      const plantUsers = await this.plantUserService.getPlantUsersByFilters({
+        instalacion: dto.instalacion,
+        disciplina: dto.disciplina,
+      });
+
+      users = plantUsers
+        .filter((x) => x.usuario.tipoUsuario.id === UserTypes.RECEPTOR)
+        .map((x) => x.usuario);
+    }
+    this.logger.verbose(
+      `users to send notification-> ${JSON.stringify({ userCreator, users })}`,
+    );
+
+    //Send notification
+    this.sendNotificationWhenIncidentIsCreated(users);
   }
 }
