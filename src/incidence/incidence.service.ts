@@ -21,7 +21,6 @@ import { CustomLoggerService } from 'src/commons/services';
 
 @Injectable()
 export class IncidenceService {
-
   constructor(
     @InjectRepository(Incidence)
     private readonly incidenceRepository: Repository<Incidence>,
@@ -34,8 +33,9 @@ export class IncidenceService {
   ) {}
 
   // Public methods
+
   async createIncidence(dto: CreateIncidenceDto) {
-    this.loggerService.request('createIncidence', dto);
+    // this.loggerService.request('createIncidence', dto);
 
     // Get plant
     const plant = await this.plantService.findPlantById(dto.instalacion);

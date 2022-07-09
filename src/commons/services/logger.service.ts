@@ -25,6 +25,12 @@ export class CustomLoggerService implements LoggerService {
       `Request - ${from} - ${Date()} -> ${JSON.stringify(request)}`,
     );
   }
+
+  response?(from: string, request: any) {
+    this.logger.verbose(
+      `Response - ${from} - ${Date()} -> ${JSON.stringify(request)}`,
+    );
+  }
   setLogLevels?(levels: LogLevel[]) {
     throw new Error('Method not implemented.');
   }
