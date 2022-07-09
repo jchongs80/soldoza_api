@@ -1,5 +1,5 @@
 import { CreateIncidenceCategoryDto } from 'src/incidence-category/dtos/create-incidence-category.dto';
-import { Injectable, Logger, LoggerService } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Incidence } from './entities';
 import { Repository } from 'typeorm';
@@ -9,7 +9,6 @@ import { IncidenceCategoryService } from 'src/incidence-category/incidence-categ
 import { PlantService } from 'src/plant/plant.service';
 import { ProjectUserService } from 'src/project-user/project-user.service';
 import {
-  getUsersByRole,
   getUsersByType,
   sendNotificationsToTokenArray,
 } from 'src/commons/helpers';
@@ -17,10 +16,11 @@ import { UserRoles, UserTypes } from 'src/commons/enums';
 import { User } from 'src/user/entities';
 import { UserService } from 'src/user/user.service';
 import { PlantUserService } from 'src/plant-user/plant-user.service';
+import { getUsersByRoles } from '../commons/helpers/user.helper';
+import { CustomLoggerService } from 'src/commons/services';
 
 @Injectable()
 export class IncidenceService {
-  logger = new Logger();
 
   constructor(
     @InjectRepository(Incidence)
@@ -30,10 +30,13 @@ export class IncidenceService {
     private readonly projectUserService: ProjectUserService,
     private readonly userService: UserService,
     private readonly plantUserService: PlantUserService,
+    private readonly loggerService: CustomLoggerService,
   ) {}
 
   // Public methods
   async createIncidence(dto: CreateIncidenceDto) {
+    this.loggerService.request('createIncidence', dto);
+
     // Get plant
     const plant = await this.plantService.findPlantById(dto.instalacion);
 
@@ -162,7 +165,7 @@ export class IncidenceService {
   ) {
     let users = await this.projectUserService.getUsersByProjectId(proyectoId);
     users = getUsersByType(users, UserTypes.EMISOR);
-    users = [].concat(rolesToSend.map((x) => getUsersByRole(users, x)));
+    users = getUsersByRoles(users, rolesToSend);
 
     return users;
   }
@@ -211,9 +214,11 @@ export class IncidenceService {
         .filter((x) => x.usuario.tipoUsuario.id === UserTypes.RECEPTOR)
         .map((x) => x.usuario);
     }
-    this.logger.verbose(
-      `users to send notification-> ${JSON.stringify({ userCreator, users })}`,
-    );
+
+    this.loggerService.verbose('users to send notification', {
+      userCreator,
+      users,
+    });
 
     //Send notification
     this.sendNotificationWhenIncidentIsCreated(users);

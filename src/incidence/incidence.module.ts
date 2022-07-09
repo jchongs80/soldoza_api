@@ -8,6 +8,7 @@ import { PlantModule } from 'src/plant/plant.module';
 import { ProjectUserModule } from 'src/project-user/project-user.module';
 import { UserModule } from 'src/user/user.module';
 import { PlantUserModule } from 'src/plant-user/plant-user.module';
+import { CustomLoggerService } from 'src/commons/services';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { PlantUserModule } from 'src/plant-user/plant-user.module';
     forwardRef(() => UserModule),
     forwardRef(() => PlantUserModule),
   ],
-  providers: [IncidenceService],
+  providers: [IncidenceService, CustomLoggerService],
   controllers: [IncidenceController],
   exports: [IncidenceService],
 })

@@ -8,7 +8,7 @@ export const sendNotificationsToTokenArray = async (
   try {
     for (const token of tokenArray) {
       const failedTokens = [];
-      if(token){
+      if (token) {
         await admin
           .messaging()
           .sendToDevice(token, payload, options)

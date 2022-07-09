@@ -68,7 +68,7 @@ export class AuthService {
           console.log('Se envio', x);
         });
     } catch (error) {
-      console.log('error ctm', error);
+      console.log('ERRO AUTH', error);
     }
   }
 }
