@@ -3,7 +3,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Incidence } from './entities';
 import { Repository } from 'typeorm';
-import { CreateIncidenceDto, IncidenceQueryDto } from './dtos';
+import {
+  CreateIncidenceDto,
+  EditIncidenceDto,
+  IncidenceQueryDto,
+} from './dtos';
 import { handlerIncidence } from './helpers';
 import { IncidenceCategoryService } from 'src/incidence-category/incidence-category.service';
 import { PlantService } from 'src/plant/plant.service';
@@ -144,6 +148,19 @@ export class IncidenceService {
         ],
       }),
     );
+  }
+
+  async updateIncidenceById(id: number, dto: EditIncidenceDto) {
+    const incidecenUpdated = await this.incidenceRepository.update(
+      { id },
+      dto as any,
+    );
+
+    if (dto.estado) {
+      console.log('Manejar estado - notificaciones');
+    }
+
+    return incidecenUpdated;
   }
 
   // Private methods
