@@ -7,7 +7,7 @@ export interface PlantUserFilter {
   id?: number;
   instalacion?: number;
   usuario?: number;
-  disciplina: number;
+  disciplina?: number;
 }
 
 @Injectable()

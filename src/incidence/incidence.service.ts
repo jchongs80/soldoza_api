@@ -16,7 +16,7 @@ import {
   getUsersByType,
   sendNotificationsToTokenArray,
 } from 'src/commons/helpers';
-import { UserRoles, UserTypes } from 'src/commons/enums';
+import { IncidenceState, UserRoles, UserTypes } from 'src/commons/enums';
 import { User } from 'src/user/entities';
 import { UserService } from 'src/user/user.service';
 import { PlantUserService } from 'src/plant-user/plant-user.service';
@@ -156,8 +156,50 @@ export class IncidenceService {
       dto as any,
     );
 
-    if (dto.estado) {
-      console.log('Manejar estado - notificaciones');
+    const incidenceFound = await this.incidenceRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['instalacion'],
+    });
+
+    switch (dto?.estado) {
+      case IncidenceState.APPROVED:
+        const users = (
+          await this.plantUserService.getPlantUsersByFilters({
+            instalacion: incidenceFound.instalacion.id,
+          })
+        )
+          .filter((x) => x.usuario.tipoUsuario.id === UserTypes.RECEPTOR)
+          .map((x) => x.usuario);
+
+        const uniqueUsers = [
+          ...new Map(users.map((user) => [user['id'], user])).values(),
+        ];
+
+        this.loggerService.verbose('users to send notification', {
+          uniqueUsers,
+        });
+
+        await sendNotificationsToTokenArray(
+          uniqueUsers.map((user) => user.token),
+          {
+            data: {
+              title: 'A incidence was updated',
+              body: 'Recently a incidence was updated.',
+              sound: 'default',
+            },
+          },
+          {
+            priority: 'high',
+            timeToLive: 60 * 60 * 24,
+          },
+        );
+
+        break;
+
+      default:
+        break;
     }
 
     return incidecenUpdated;

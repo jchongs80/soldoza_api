@@ -1,4 +1,5 @@
 import * as admin from 'firebase-admin';
+import { TraceLogger } from '../decorators';
 
 export const sendNotificationsToTokenArray = async (
   tokenArray: string[],
