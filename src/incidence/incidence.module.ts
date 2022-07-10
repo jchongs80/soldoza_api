@@ -1,4 +1,4 @@
-import { forwardRef, Module, LoggerService } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { IncidenceService } from './incidence.service';
 import { IncidenceController } from './incidence.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,8 +8,6 @@ import { PlantModule } from 'src/plant/plant.module';
 import { ProjectUserModule } from 'src/project-user/project-user.module';
 import { UserModule } from 'src/user/user.module';
 import { PlantUserModule } from 'src/plant-user/plant-user.module';
-import { CustomLoggerService } from 'src/commons/services';
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([Incidence]),
@@ -19,7 +17,7 @@ import { CustomLoggerService } from 'src/commons/services';
     forwardRef(() => UserModule),
     forwardRef(() => PlantUserModule),
   ],
-  providers: [IncidenceService, CustomLoggerService],
+  providers: [IncidenceService],
   controllers: [IncidenceController],
   exports: [IncidenceService],
 })

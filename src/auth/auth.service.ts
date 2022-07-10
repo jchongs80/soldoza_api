@@ -4,6 +4,7 @@ import { User } from 'src/user/entities';
 import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dtos';
 import * as admin from 'firebase-admin';
+import { TraceLogger } from 'src/commons/decorators';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
         role: user.rol,
         userPhoto: user?.fotoUsuario || 'default',
         userSignature: user?.firmaUsuario || 'default',
-        userType: user?.tipoUsuario
+        userType: user?.tipoUsuario,
       }),
     };
   }
@@ -41,23 +42,21 @@ export class AuthService {
     return null;
   }
 
+  @TraceLogger()
   async testFirebase() {
     var payload = {
       notification: {
         title: 'This is a diegdddo kraenau',
         body: 'This is the body of the notification message.',
-        sound: "default"
+        sound: 'default',
       },
     };
-
     const options = {
       priority: 'high',
       timeToLive: 60 * 60 * 24,
     };
-
     const token =
       'fzgSqdkHSxKohjFBUyWSXH:APA91bHhaNV1FaQKo5VMKgcK2pk6728hP9OJTOsRZVMA3wo0VzOdTUOIRYp6XoMu3H0shDu6tyiSczGqiscZDcY_FDQdF15ZrQT1tqelNn2TIzVseshcwS04vaMqYeOCiXcgnmj3pTEj';
-
     try {
       // const messaging = admin.messaging();
       // console.log(messaging)

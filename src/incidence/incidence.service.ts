@@ -21,7 +21,7 @@ import { User } from 'src/user/entities';
 import { UserService } from 'src/user/user.service';
 import { PlantUserService } from 'src/plant-user/plant-user.service';
 import { getUsersByRoles } from '../commons/helpers/user.helper';
-import { CustomLoggerService } from 'src/commons/services';
+import { CustomLoggerService } from 'src/logger-config/services';
 
 @Injectable()
 export class IncidenceService {

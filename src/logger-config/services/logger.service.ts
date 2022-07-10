@@ -1,5 +1,4 @@
 import { Injectable, Logger, LoggerService, LogLevel } from '@nestjs/common';
-import * as request from 'supertest';
 
 @Injectable()
 export class CustomLoggerService implements LoggerService {
