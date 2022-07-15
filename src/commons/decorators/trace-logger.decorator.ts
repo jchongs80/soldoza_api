@@ -1,11 +1,12 @@
 import { Inject } from '@nestjs/common';
+import { LoggerConfig } from 'src/logger-config/interfaces';
 import {
   CustomLoggerService,
   LoggerConfigService,
 } from 'src/logger-config/services';
 
 export const TraceLogger =
-  () =>
+  (conf?: LoggerConfig) =>
   (
     target: Object,
     propertyName: string,
@@ -21,13 +22,14 @@ export const TraceLogger =
       const logger: CustomLoggerService = this.logger;
       const loggerConfig: LoggerConfigService = this.loggerConfig;
 
-      loggerConfig.getConfig()?.showLogs && logger.request(propertyName, args);
+      const configuration = conf ? conf : loggerConfig.getConfig();
+
+      configuration?.showLogs && logger.request(propertyName, args);
 
       // invoke greet() and get its return value
       const result = await method.apply(this, args);
 
-      loggerConfig.getConfig()?.showLogs &&
-        logger.response(propertyName, result);
+      configuration?.showLogs && logger.response(propertyName, result);
 
       // return the result of invoking the method
       return result;

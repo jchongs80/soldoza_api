@@ -15,7 +15,7 @@ export class Discipline {
   descripcionDisciplina: string;
 
   @OneToMany(() => Category, (category) => category.disciplina)
-  categorias: Incidence[];
+  categorias: Category[];
 
   @OneToMany(() => Incidence, (incidence) => incidence.disciplina)
   incidences: Incidence[];

@@ -15,4 +15,7 @@ export class IncidenceQueryDto {
 
   @IsOptional()
   usuarioCreadorId:number;
+
+  @IsOptional()
+  disciplinaId: number;
 }

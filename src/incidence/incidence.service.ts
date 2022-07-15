@@ -23,6 +23,15 @@ import { PlantUserService } from 'src/plant-user/plant-user.service';
 import { getUsersByRoles } from '../commons/helpers/user.helper';
 import { CustomLoggerService } from 'src/logger-config/services';
 
+export interface IncidenceDescriptionMessage {
+  incidencia?: number;
+  proyecto?: number;
+  instalacion?: number;
+  zona?: number;
+  subzona?: number;
+  disciplina?: number;
+}
+
 @Injectable()
 export class IncidenceService {
   constructor(
@@ -80,7 +89,7 @@ export class IncidenceService {
     }
 
     // Manage notifications
-    await this.manageSendNotifications(userCreator, dto);
+    await this.manageSendNotifications(userCreator, dto, incidenceCreated?.id);
 
     return incidenceCreated;
   }
@@ -103,6 +112,9 @@ export class IncidenceService {
         usuarioCreador: {
           id: dto?.usuarioCreadorId || null,
         },
+        disciplina: {
+          id: dto?.disciplinaId || null,
+        },
       },
       relations: [
         'proyecto',
@@ -120,6 +132,9 @@ export class IncidenceService {
         'fotos.usuario.tipoUsuario',
         'usuarioCreador.tipoUsuario',
       ],
+      order: {
+        id: 'DESC',
+      },
     });
     return incidences.map((x) => handlerIncidence(x));
   }
@@ -229,13 +244,16 @@ export class IncidenceService {
     return users;
   }
 
-  private async sendNotificationWhenIncidentIsCreated(users: User[]) {
+  private async sendNotificationWhenIncidentIsCreated(
+    users: User[],
+    incidenceMessage?: IncidenceDescriptionMessage,
+  ) {
     await sendNotificationsToTokenArray(
       users.map((x) => x.token),
       {
         data: {
-          title: 'A new incidence was created',
-          body: 'Recently a new incidence was created.',
+          title: `A new work observation ${incidenceMessage.incidencia} was created`,
+          body: `${incidenceMessage.proyecto} / ${incidenceMessage.instalacion} / ${incidenceMessage.zona} / ${incidenceMessage.subzona} / ${incidenceMessage.disciplina}`,
           sound: 'default',
         },
       },
@@ -249,6 +267,7 @@ export class IncidenceService {
   private async manageSendNotifications(
     userCreator: User,
     dto: CreateIncidenceDto,
+    incidenceId?: number,
   ) {
     let users = [];
     //Get users by project, tipo = EMISOR, rol = 3
@@ -280,6 +299,12 @@ export class IncidenceService {
     });
 
     //Send notification
-    this.sendNotificationWhenIncidentIsCreated(users);
+    this.sendNotificationWhenIncidentIsCreated(users, {
+      incidencia: incidenceId,
+      instalacion: dto.instalacion,
+      zona: dto.zona,
+      subzona: dto.subZona,
+      disciplina: dto.disciplina,
+    });
   }
 }

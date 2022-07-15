@@ -20,7 +20,7 @@ export class IncidenceController {
   }
 
   @Get('find-by-filters')
-  @TraceLogger()
+  @TraceLogger({showLogs: false})
   async findByFilters(@Query() query: IncidenceQueryDto) {
     return await this.incidenceService.findByFilters(query);
   }
@@ -46,4 +46,5 @@ export class IncidenceController {
 
     return incidence;
   }
+  
 }

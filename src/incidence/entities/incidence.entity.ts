@@ -109,6 +109,7 @@ export class Incidence {
     name: 'codigo_nc',
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   codigoNC: string;
 
@@ -116,6 +117,7 @@ export class Incidence {
     name: 'comentario_receptor',
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   comentarioReceptor: string;
 
@@ -123,6 +125,7 @@ export class Incidence {
     name: 'resultado_receptor',
     type: 'varchar',
     nullable: true,
+    default: null,
   })
   resultadoReceptor: string;
 

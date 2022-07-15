@@ -18,7 +18,7 @@ export class PlantUserService {
   ) {}
 
   async getPlantUsersByFilters(data: PlantUserFilter) {
-    return this.plantUserRepository.find({
+    return await this.plantUserRepository.find({
       where: {
         instalacion: {
           id: data?.instalacion,
@@ -29,5 +29,48 @@ export class PlantUserService {
       },
       relations: ['usuario.rol', 'usuario.tipoUsuario'],
     });
+  }
+
+  async getPlantsByUserId(id: number) {
+    const plants = (
+      await this.plantUserRepository.find({
+        where: {
+          usuario: {
+            id,
+          },
+        },
+        relations: ['instalacion'],
+      })
+    ).map((x) => x.instalacion);
+
+    const uniquePlants = [
+      ...new Map(plants.map((plant) => [plant['id'], plant])).values(),
+    ];
+
+    return uniquePlants;
+  }
+
+  async getDisciplinesByUserIdAndPlantId(userId: number, plantId: number) {
+    const disciplines = (
+      await this.plantUserRepository.find({
+        where: {
+          usuario: {
+            id: userId,
+          },
+          instalacion: {
+            id: plantId,
+          },
+        },
+        relations: ['disciplina'],
+      })
+    ).map((x) => x.disciplina);
+
+    const uniqueDisciplines = [
+      ...new Map(
+        disciplines.map((discipline) => [discipline['id'], discipline]),
+      ).values(),
+    ];
+
+    return uniqueDisciplines;
   }
 }

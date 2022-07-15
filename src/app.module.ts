@@ -37,7 +37,7 @@ import { LoggerConfigModule } from './logger-config/logger-config.module';
       synchronize: false,
     }),
     LoggerConfigModule.forRoot({
-      showLogs: false,
+      showLogs: true,
     }),
     RoleModule,
     UserModule,
