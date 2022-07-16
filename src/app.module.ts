@@ -21,6 +21,7 @@ import { IncidenceStateModule } from './incidence-state/incidence-state.module';
 import { PhotoModule } from './photo/photo.module';
 import { PlantUserModule } from './plant-user/plant-user.module';
 import { LoggerConfigModule } from './logger-config/logger-config.module';
+import { UserDisciplineModule } from './user-discipline/user-discipline.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { LoggerConfigModule } from './logger-config/logger-config.module';
     IncidenceStateModule,
     PhotoModule,
     PlantUserModule,
+    UserDisciplineModule,
   ],
 })
 export class AppModule {}

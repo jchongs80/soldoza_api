@@ -7,7 +7,6 @@ export interface PlantUserFilter {
   id?: number;
   instalacion?: number;
   usuario?: number;
-  disciplina?: number;
 }
 
 @Injectable()
@@ -22,9 +21,6 @@ export class PlantUserService {
       where: {
         instalacion: {
           id: data?.instalacion,
-        },
-        disciplina: {
-          id: data?.disciplina,
         },
       },
       relations: ['usuario.rol', 'usuario.tipoUsuario'],
@@ -50,27 +46,27 @@ export class PlantUserService {
     return uniquePlants;
   }
 
-  async getDisciplinesByUserIdAndPlantId(userId: number, plantId: number) {
-    const disciplines = (
-      await this.plantUserRepository.find({
-        where: {
-          usuario: {
-            id: userId,
-          },
-          instalacion: {
-            id: plantId,
-          },
-        },
-        relations: ['disciplina'],
-      })
-    ).map((x) => x.disciplina);
+  // async getDisciplinesByUserIdAndPlantId(userId: number, plantId: number) {
+  //   const disciplines = (
+  //     await this.plantUserRepository.find({
+  //       where: {
+  //         usuario: {
+  //           id: userId,
+  //         },
+  //         instalacion: {
+  //           id: plantId,
+  //         },
+  //       },
+  //       relations: ['disciplina'],
+  //     })
+  //   ).map((x) => x.disciplina);
 
-    const uniqueDisciplines = [
-      ...new Map(
-        disciplines.map((discipline) => [discipline['id'], discipline]),
-      ).values(),
-    ];
+  //   const uniqueDisciplines = [
+  //     ...new Map(
+  //       disciplines.map((discipline) => [discipline['id'], discipline]),
+  //     ).values(),
+  //   ];
 
-    return uniqueDisciplines;
-  }
+  //   return uniqueDisciplines;
+  // }
 }

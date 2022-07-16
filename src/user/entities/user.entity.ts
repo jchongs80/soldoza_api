@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { Photo } from 'src/photo/entities';
 import { PlantUser } from 'src/plant-user/entities';
+import { UserDiscipline } from 'src/user-discipline/entities';
 
 @Entity('wo_soldoza_sec_usuarios')
 export class User {
@@ -64,4 +65,7 @@ export class User {
 
   @OneToMany(() => PlantUser, (plantUser) => plantUser.instalacion)
   instalacionesUsuarios: PlantUser[];
+
+  @OneToMany(() => UserDiscipline, (userDiscipline) => userDiscipline.usuario)
+  usuarioDisciplinas: UserDiscipline[];
 }

@@ -22,14 +22,15 @@ import { UserService } from 'src/user/user.service';
 import { PlantUserService } from 'src/plant-user/plant-user.service';
 import { getUsersByRoles } from '../commons/helpers/user.helper';
 import { CustomLoggerService } from 'src/logger-config/services';
+import { UserDisciplineService } from 'src/user-discipline/user-discipline.service';
 
 export interface IncidenceDescriptionMessage {
-  incidencia?: number;
-  proyecto?: number;
-  instalacion?: number;
-  zona?: number;
-  subzona?: number;
-  disciplina?: number;
+  incidencia?: string;
+  proyecto?: string;
+  instalacion?: string;
+  zona?: string;
+  subzona?: string;
+  disciplina?: string;
 }
 
 @Injectable()
@@ -43,6 +44,7 @@ export class IncidenceService {
     private readonly userService: UserService,
     private readonly plantUserService: PlantUserService,
     private readonly loggerService: CustomLoggerService,
+    private readonly userDisciplineService: UserDisciplineService,
   ) {}
 
   // Public methods
@@ -59,7 +61,7 @@ export class IncidenceService {
     ).length;
 
     const codIncidence =
-      'I -' +
+      'WO-' +
       plant.codInstalacion +
       '-' +
       String(amountOfIncidencesByPlantId + 1);
@@ -75,9 +77,12 @@ export class IncidenceService {
       codIncidente: codIncidence,
       estado: userCreator.rol.id === 3 ? 1 : 2,
     } as any);
+
     const incidenceCreated: any = await this.incidenceRepository.save(
       incidence,
     );
+
+    const incidenceCreatedFound = await this.findById(incidenceCreated.id);
 
     // Map with categories
     for await (const categoryId of dto.categorias) {
@@ -89,7 +94,11 @@ export class IncidenceService {
     }
 
     // Manage notifications
-    await this.manageSendNotifications(userCreator, dto, incidenceCreated?.id);
+    await this.manageSendNotifications(
+      userCreator,
+      incidenceCreatedFound,
+      incidenceCreated?.id,
+    );
 
     return incidenceCreated;
   }
@@ -266,13 +275,13 @@ export class IncidenceService {
 
   private async manageSendNotifications(
     userCreator: User,
-    dto: CreateIncidenceDto,
+    dto: Incidence,
     incidenceId?: number,
   ) {
     let users = [];
     //Get users by project, tipo = EMISOR, rol = 3
     if (userCreator.rol.id === UserRoles.NIVEL_3) {
-      users = await this.filterUsersToSendNotification(dto.proyecto, [
+      users = await this.filterUsersToSendNotification(dto.proyecto.id, [
         UserRoles.NIVEL_1,
         UserRoles.NIVEL_2,
       ]);
@@ -284,14 +293,29 @@ export class IncidenceService {
       userCreator.rol.id === UserRoles.NIVEL_2
     ) {
       const plantUsers = await this.plantUserService.getPlantUsersByFilters({
-        instalacion: dto.instalacion,
-        disciplina: dto.disciplina,
+        instalacion: dto.instalacion.id,
+        // disciplina: dto.disciplina.id,
       });
 
       users = plantUsers
         .filter((x) => x.usuario.tipoUsuario.id === UserTypes.RECEPTOR)
         .map((x) => x.usuario);
     }
+
+    // Filter unique users
+    users = [...new Map(users.map((user) => [user['id'], user])).values()];
+
+    // Filter users with the same discipline
+    const userDisciplines =
+      await this.userDisciplineService.getUsersByDisciplineId(
+        dto?.disciplina.id,
+      );
+
+    users = userDisciplines.filter((x) => {
+      return users.some((y) => {
+        return x.id === y.id;
+      });
+    });
 
     this.loggerService.verbose('users to send notification', {
       userCreator,
@@ -300,11 +324,12 @@ export class IncidenceService {
 
     //Send notification
     this.sendNotificationWhenIncidentIsCreated(users, {
-      incidencia: incidenceId,
-      instalacion: dto.instalacion,
-      zona: dto.zona,
-      subzona: dto.subZona,
-      disciplina: dto.disciplina,
+      incidencia: dto.codIncidente,
+      proyecto: dto.proyecto.codProyecto,
+      instalacion: dto.instalacion.codInstalacion,
+      zona: dto.zona.codZona,
+      subzona: dto.subZona.codSubzona,
+      disciplina: dto.disciplina.codDisciplina,
     });
   }
 }

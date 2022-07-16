@@ -10,11 +10,11 @@ export class PlantUserController {
     return await this.plantUserService.getPlantsByUserId(Number(id));
   }
 
-  @Post('user-disciplines')
-  async getDisciplinesByUserIdAndPlantId(@Body() dto: any) {
-    return await this.plantUserService.getDisciplinesByUserIdAndPlantId(
-      Number(dto?.usuario),
-      Number(dto?.instalacion),
-    );
-  }
+  // @Post('user-disciplines')
+  // async getDisciplinesByUserIdAndPlantId(@Body() dto: any) {
+  //   return await this.plantUserService.getDisciplinesByUserIdAndPlantId(
+  //     Number(dto?.usuario),
+  //     Number(dto?.instalacion),
+  //   );
+  // }
 }

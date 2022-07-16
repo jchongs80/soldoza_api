@@ -8,6 +8,7 @@ import { PlantModule } from 'src/plant/plant.module';
 import { ProjectUserModule } from 'src/project-user/project-user.module';
 import { UserModule } from 'src/user/user.module';
 import { PlantUserModule } from 'src/plant-user/plant-user.module';
+import { UserDisciplineModule } from 'src/user-discipline/user-discipline.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Incidence]),
@@ -16,6 +17,7 @@ import { PlantUserModule } from 'src/plant-user/plant-user.module';
     forwardRef(() => ProjectUserModule),
     forwardRef(() => UserModule),
     forwardRef(() => PlantUserModule),
+    forwardRef(() => UserDisciplineModule),
   ],
   providers: [IncidenceService],
   controllers: [IncidenceController],

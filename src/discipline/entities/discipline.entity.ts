@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Incidence } from '../../incidence/entities/incidence.entity';
 import { Category } from '../../category/entities/category.entity';
-import { PlantUser } from 'src/plant-user/entities';
+import { UserDiscipline } from 'src/user-discipline/entities';
 
 @Entity('wo_soldoza_mst_disciplina')
 export class Discipline {
@@ -20,6 +20,9 @@ export class Discipline {
   @OneToMany(() => Incidence, (incidence) => incidence.disciplina)
   incidences: Incidence[];
 
-  @OneToMany(() => PlantUser, (plantUser) => plantUser.instalacion)
-  instalacionesUsuarios: PlantUser[];
+  @OneToMany(
+    () => UserDiscipline,
+    (userDiscipline) => userDiscipline.disciplina,
+  )
+  usuarioDisciplinas: UserDiscipline[];
 }
