@@ -35,7 +35,7 @@ export class PlantUserService {
             id,
           },
         },
-        relations: ['instalacion'],
+        relations: ['instalacion.proyecto.cliente'],
       })
     ).map((x) => x.instalacion);
 
