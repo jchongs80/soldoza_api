@@ -184,7 +184,7 @@ export class IncidenceService {
       where: {
         id,
       },
-      relations: ['instalacion'],
+      relations: ['instalacion', 'proyecto', 'zona', 'subZona','disciplina'],
     });
 
     switch (dto?.estado) {
@@ -209,8 +209,8 @@ export class IncidenceService {
           uniqueUsers.map((user) => user.token),
           {
             data: {
-              title: 'A incidence was updated',
-              body: 'Recently a incidence was updated.',
+              title: `A observation ${incidenceFound.codIncidente} was updated`,
+              body: `${incidenceFound.proyecto.codProyecto} / ${incidenceFound.instalacion.codInstalacion} / ${incidenceFound.zona.codZona} / ${incidenceFound.subZona.codSubzona} / ${incidenceFound.disciplina.codDisciplina}`,
               sound: 'default',
             },
           },
