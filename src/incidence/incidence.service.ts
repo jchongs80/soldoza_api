@@ -75,7 +75,11 @@ export class IncidenceService {
     const incidence = this.incidenceRepository.create({
       ...dto,
       codIncidente: codIncidence,
-      estado: userCreator.rol.id === 3 ? 1 : 2,
+      estado: userCreator.rol.id === UserRoles.NIVEL_3 ? 1 : 2,
+      usuarioApproved:
+        userCreator.rol.id === UserRoles.NIVEL_3 ? null : dto.usuarioCreador,
+      fechaApproved:
+        userCreator.rol.id === UserRoles.NIVEL_3 ? null : dto.fechaIncidencia,
     } as any);
 
     const incidenceCreated: any = await this.incidenceRepository.save(
@@ -184,11 +188,11 @@ export class IncidenceService {
       where: {
         id,
       },
-      relations: ['instalacion', 'proyecto', 'zona', 'subZona','disciplina'],
+      relations: ['instalacion', 'proyecto', 'zona', 'subZona', 'disciplina'],
     });
 
     switch (dto?.estado) {
-      case IncidenceState.APPROVED:
+      case IncidenceState.APPROVED: {
         const users = (
           await this.plantUserService.getPlantUsersByFilters({
             instalacion: incidenceFound.instalacion.id,
@@ -201,7 +205,7 @@ export class IncidenceService {
           ...new Map(users.map((user) => [user['id'], user])).values(),
         ];
 
-        this.loggerService.verbose('users to send notification', {
+        this.loggerService.verbose('users to send notification (Edit)', {
           uniqueUsers,
         });
 
@@ -209,7 +213,7 @@ export class IncidenceService {
           uniqueUsers.map((user) => user.token),
           {
             data: {
-              title: `A observation ${incidenceFound.codIncidente} was updated`,
+              title: `${incidenceFound.codIncidente} was APPROVED`,
               body: `${incidenceFound.proyecto.codProyecto} / ${incidenceFound.instalacion.codInstalacion} / ${incidenceFound.zona.codZona} / ${incidenceFound.subZona.codSubzona} / ${incidenceFound.disciplina.codDisciplina}`,
               sound: 'default',
             },
@@ -221,7 +225,35 @@ export class IncidenceService {
         );
 
         break;
+      }
 
+      case IncidenceState.CORRECTED: {
+        let users = await this.filterUsersToSendNotification(
+          incidenceFound.proyecto.id,
+          [UserRoles.NIVEL_1, UserRoles.NIVEL_2],
+        );
+
+        users = [...new Map(users.map((user) => [user['id'], user])).values()];
+
+        this.loggerService.verbose('users to send notification (Edit)', {
+          users,
+        });
+
+        await sendNotificationsToTokenArray(
+          users.map((user) => user.token),
+          {
+            data: {
+              title: `${incidenceFound.codIncidente} was CORRECTED`,
+              body: `${incidenceFound.proyecto.codProyecto} / ${incidenceFound.instalacion.codInstalacion} / ${incidenceFound.zona.codZona} / ${incidenceFound.subZona.codSubzona} / ${incidenceFound.disciplina.codDisciplina}`,
+              sound: 'default',
+            },
+          },
+          {
+            priority: 'high',
+            timeToLive: 60 * 60 * 24,
+          },
+        );
+      }
       default:
         break;
     }
@@ -242,7 +274,7 @@ export class IncidenceService {
     return incidences;
   }
 
-  private async filterUsersToSendNotification(
+  public async filterUsersToSendNotification(
     proyectoId: number,
     rolesToSend: number[],
   ) {
@@ -261,7 +293,7 @@ export class IncidenceService {
       users.map((x) => x.token),
       {
         data: {
-          title: `A new work observation ${incidenceMessage.incidencia} was created`,
+          title: `${incidenceMessage.incidencia} was CREATED`,
           body: `${incidenceMessage.proyecto} / ${incidenceMessage.instalacion} / ${incidenceMessage.zona} / ${incidenceMessage.subzona} / ${incidenceMessage.disciplina}`,
           sound: 'default',
         },

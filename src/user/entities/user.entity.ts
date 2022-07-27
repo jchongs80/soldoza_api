@@ -51,6 +51,24 @@ export class User {
   @OneToMany(() => Incidence, (incidence) => incidence.usuarioCreador)
   incidentesCreados: Incidence[];
 
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioRejected)
+  incidentesRejected: Incidence[];
+
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioReceived)
+  incidentesReceived: Incidence[];
+
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioCommented)
+  incidentesCommented: Incidence[];
+
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioCorrected)
+  incidentesCorrected: Incidence[];
+
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioClosed)
+  incidentesClosed: Incidence[];
+
+  @OneToMany(() => Incidence, (incidence) => incidence.usuarioApproved)
+  incidentesApproved: Incidence[];
+
   @OneToMany(() => Photo, (photo) => photo.usuario)
   incidenteFotos: Photo[];
 

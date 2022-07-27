@@ -47,9 +47,52 @@ export class Incidence {
 
   @ManyToOne(() => User, (user) => user.incidentesCreados, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ name: 'usuario_creador_id' })
   usuarioCreador: User;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usuario_rejected_id' })
+  usuarioRejected: User;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usuario_received_id' })
+  usuarioReceived: User;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usuario_commented_id' })
+  usuarioCommented: User;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usuario_corrected_id' })
+  usuarioCorrected: User;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usuario_closed_id' })
+  usuarioClosed: User;
+
+  @ManyToOne(() => User, (user) => user.incidentesCreados, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'usuario_approved_id' })
+  usuarioApproved: User;
 
   @ManyToOne(() => Discipline, (discipline) => discipline.incidences, {
     onDelete: 'CASCADE',
@@ -84,6 +127,48 @@ export class Incidence {
     nullable: true,
   })
   fechaIncidencia: string;
+
+  @Column({
+    name: 'fecha_rejected',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaRejected: string;
+
+  @Column({
+    name: 'fecha_received',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaReceived: string;
+
+  @Column({
+    name: 'fecha_commented',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaCommented: string;
+
+  @Column({
+    name: 'fecha_corrected',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaCorrected: string;
+
+  @Column({
+    name: 'fecha_closed',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaClosed: string;
+
+  @Column({
+    name: 'fecha_approved',
+    type: 'varchar',
+    nullable: true,
+  })
+  fechaApproved: string;
 
   @Column({ name: 'descripcion_incidencia', type: 'varchar', nullable: true })
   descripcionIncidencia: string;
@@ -135,4 +220,11 @@ export class Incidence {
     nullable: true,
   })
   codIncidente: string;
+
+  @Column({
+    name: 'origen',
+    type: 'int',
+    default: 0,
+  })
+  origen: number;
 }

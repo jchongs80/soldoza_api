@@ -24,4 +24,40 @@ export class EditIncidenceDto {
 
   @IsOptional()
   resultadoReceptor: string;
+
+  @IsOptional()
+  usuarioRejected: number;
+
+  @IsOptional()
+  usuarioReceived: number;
+
+  @IsOptional()
+  usuarioCommented: number;
+
+  @IsOptional()
+  usuarioCorrected: number;
+
+  @IsOptional()
+  usuarioClosed: number;
+
+  @IsOptional()
+  usuarioApproved: number;
+
+  @IsOptional()
+  fechaRejected: string;
+
+  @IsOptional()
+  fechaReceived: string;
+
+  @IsOptional()
+  fechaCommented: string;
+
+  @IsOptional()
+  fechaCorrected: string;
+
+  @IsOptional()
+  fechaClosed: string;
+
+  @IsOptional()
+  fechaApproved: string;
 }
