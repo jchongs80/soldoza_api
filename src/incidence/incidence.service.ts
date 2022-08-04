@@ -287,13 +287,16 @@ export class IncidenceService {
 
   private async sendNotificationWhenIncidentIsCreated(
     users: User[],
+    wasUpdated: boolean,
     incidenceMessage?: IncidenceDescriptionMessage,
   ) {
     await sendNotificationsToTokenArray(
       users.map((x) => x.token),
       {
         data: {
-          title: `${incidenceMessage.incidencia} was CREATED`,
+          title: `${incidenceMessage.incidencia} was ${
+            wasUpdated ? 'APPROVED' : 'CREATED'
+          }`,
           body: `${incidenceMessage.proyecto} / ${incidenceMessage.instalacion} / ${incidenceMessage.zona} / ${incidenceMessage.subzona} / ${incidenceMessage.disciplina}`,
           sound: 'default',
         },
@@ -355,13 +358,18 @@ export class IncidenceService {
     });
 
     //Send notification
-    this.sendNotificationWhenIncidentIsCreated(users, {
-      incidencia: dto.codIncidente,
-      proyecto: dto.proyecto.codProyecto,
-      instalacion: dto.instalacion.codInstalacion,
-      zona: dto.zona.codZona,
-      subzona: dto.subZona.codSubzona,
-      disciplina: dto.disciplina.codDisciplina,
-    });
+    this.sendNotificationWhenIncidentIsCreated(
+      users,
+      userCreator.rol.id === UserRoles.NIVEL_1 ||
+        userCreator.rol.id === UserRoles.NIVEL_2,
+      {
+        incidencia: dto.codIncidente,
+        proyecto: dto.proyecto.codProyecto,
+        instalacion: dto.instalacion.codInstalacion,
+        zona: dto.zona.codZona,
+        subzona: dto.subZona.codSubzona,
+        disciplina: dto.disciplina.codDisciplina,
+      },
+    );
   }
 }
