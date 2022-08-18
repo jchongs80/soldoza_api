@@ -16,8 +16,9 @@ export const sendNotificationsToTokenArray = async (
             'https://fcm.googleapis.com/fcm/send',
             {
               to: token,
-              priority: options?.priority,
-              notification: payload?.data,
+              content_available: true,
+              mutable_content: true,
+              data: payload?.data,
             },
             {
               headers: {
