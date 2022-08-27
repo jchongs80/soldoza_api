@@ -22,7 +22,7 @@ async function bootstrap() {
       whitelist: true, //Validate body if accept any other field in json
     }),
   );
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 
   //Debug
   logger.log(`Server rendering in ${await app.getUrl()}`);
