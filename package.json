@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:prd": "env-cmd -f src/environments/.env.prod nest build",
+    "build:prd": "env-cmd -f src/environments/.env.dev nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "env-cmd -f src/environments/.env.dev nest start --watch",
